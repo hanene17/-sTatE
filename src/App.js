@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import imgSrc from './imgSrc.jpg';
 import './App.css';
 import bgStyle from './bgStyle.jpg';
@@ -8,7 +8,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 
- 
+
+
 const INITIAL_STATE = {
   Person : [{
     
@@ -54,27 +55,52 @@ class App extends Component {
   
   constructor(props) {
     super(props);
+    
  
     this.state =  {INITIAL_STATE: false,
     Person:[],
+    count: 1,
+    message: '',
+    
     }
+    
+    
   };
   
  
   OnSetArray = () => {
+   
     this.setState({ Person: [] }, ()  => setTimeout(() => {
-      this.setState({ ...INITIAL_STATE })
+      this.setState({ ...INITIAL_STATE }) 
     
-    }, 4000));
-  }
+    }, 4000) );
+    }
+  
 
-  
+    countDown() {
+      setInterval(() => {
+        if (this.state.count <= 0) {
+          clearInterval(this);
+          this.setState(() => {
+            return {message: "Click here"}
+          }) 
+        } else {
+          this.setState((prevState) => {
+            return {count: prevState.count + 1}
+          }) 
+        }
+      }, 1000)
+    }  
  
-  
+    
  
   render() {
   
     return (
+
+      
+       
+     
       <div className="app" style={{
         backgroundImage: "url(" + bgStyle + ")",
         width: "50%",
@@ -100,11 +126,14 @@ class App extends Component {
     
      
      ))}
-     
-     
+     <div>
+    
      <Button  variant="outline-dark" size="xxl" onClick={this.OnSetArray }>
           Click me!!
-        </Button>
+        </Button> <h1>
+          {this.state.message ? this.state.message : this.state.count}
+        </h1>
+        </div>
            
       </div>
 
@@ -114,15 +143,20 @@ class App extends Component {
 
     );   
   }
+  
   componentDidMount() {
-    
-  // set Interval
-    this.interval = setTimeout(this.OnSetArray, 4000);
-}
-componentWillUnmount() {
-  // Clear the interval right before component unmount
-  clearInterval(this.interval);
-}
+    this.inter = setInterval(() => {
+      if (this.state.count <= 0) {
+        clearInterval(this.inter);
+        this.setState({
+          message: 'Click here'
+        }); 
+      } else {
+        this.setState((prevState) => ({count: prevState.count + 1})); 
+      }
+    }, 1000);
+  }
+  
 
 }
  
