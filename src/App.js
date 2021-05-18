@@ -156,6 +156,9 @@ class App extends Component {
       }
     }, 1000);
   }
+  componentWillUnmount() {
+    clearInterval(this.inter);
+  }
   
 
 }
